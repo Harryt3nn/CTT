@@ -1,13 +1,17 @@
-import { app, BrowserWindow, ipcMain } from "electron";
+import { app, BrowserWindow, ipcMain, dialog, IpcMainInvokeEvent, OpenDialogOptions } from "electron";
 import fs from "fs";
 import path from "path";
+import { ImportRepertoiresPayload } from "./types/ImportPayload";
+import { importRepertoires } from "./Storage/ImportService";
+import {
+  loadFolders,
+  saveFolders,
+  loadRepertoires,
+  saveRepertoires
+} from "./Storage/MainStorage";
 
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
-
-// ─────────────────────────────────────────────
-// Storage paths
-// ─────────────────────────────────────────────
 
 const DATA_DIR = path.join(app.getPath("userData"), "ctt-data");
 const FOLDERS_PATH = path.join(DATA_DIR, "folders.json");
@@ -20,10 +24,6 @@ function ensureDirs() {
     fs.writeFileSync(FOLDERS_PATH, JSON.stringify({ folders: [] }, null, 2));
   }
 }
-
-// ─────────────────────────────────────────────
-// IPC handlers
-// ─────────────────────────────────────────────
 
 ipcMain.handle("storage:loadFolders", async () => {
   ensureDirs();
@@ -58,9 +58,24 @@ ipcMain.handle("storage:saveRepertoire", async (_, rep) => {
   await fs.promises.writeFile(filePath, JSON.stringify(rep, null, 2), "utf8");
 });
 
-// ─────────────────────────────────────────────
-// Window creation
-// ─────────────────────────────────────────────
+ipcMain.handle(
+  "storage:openFileDialog",
+  async (_event: Electron.IpcMainInvokeEvent, options: Electron.OpenDialogOptions) => {
+    const result = await dialog.showOpenDialog(options);
+    return result.filePaths;
+  }
+);
+
+ipcMain.handle(
+  "storage:readFile",
+  async (_event: Electron.IpcMainInvokeEvent, filePath: string) => {
+    return fs.promises.readFile(filePath, "utf8");
+  }
+);
+
+ipcMain.handle("storage:importRepertoires", async (_, payload) => {
+  return await importRepertoires(payload);
+});
 
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({

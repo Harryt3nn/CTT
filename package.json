@@ -30,6 +30,7 @@
     "@electron/fuses": "^1.8.0",
     "@types/react": "^19.2.15",
     "@types/react-dom": "^19.2.3",
+    "@types/react-toastify": "^4.0.2",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
     "@typescript-eslint/parser": "^5.62.0",
     "@vercel/webpack-asset-relocator-loader": "^1.7.3",
@@ -51,6 +52,8 @@
     "dagre": "^0.8.5",
     "electron-squirrel-startup": "^1.0.1",
     "react-chessboard": "^5.10.0",
+    "react-hot-toast": "^2.6.0",
+    "react-toastify": "^11.1.0",
     "reactflow": "^11.11.4"
   }
 }

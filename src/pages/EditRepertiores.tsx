@@ -5,9 +5,10 @@ import TrainingToolkit from './TrainingToolkit';
 import { FileSystemStorageProvider } from "../Storage/FileSystemStorageProvider";
 import { useMemo } from "react";
 import FolderSelection from "../components/FolderSelection";
-
-
-
+import { validateChessGraphExport } from "../importsAndExports/validateChessGraphExport";
+import { prepareForImport } from "../importsAndExports/prepareForImport";
+import { ImportModal } from "../components/ImportModal";
+import { RepList } from "../Storage/RepList";
 
 export interface Repertoire {
   id: string;
@@ -307,6 +308,45 @@ const EditRepertoires = ({ onBack }: { onBack: () => void }) => {
   const [newFolderName, setNewFolderName] = useState("");
   const newFolderRef = useRef<HTMLInputElement>(null);
   const storage = useMemo(() => new FileSystemStorageProvider(), []);
+  const [pendingImportData, setPendingImportData] = useState<any | null>(null);
+  const [showImportModal, setShowImportModal] = useState(false);
+  
+
+  const handleImportClick = async () => {
+  const filePaths = await window.storage.openFileDialog({
+    filters: [{ name: "JSON Files", extensions: ["json"] }]
+  });
+
+  if (!filePaths || filePaths.length === 0) return;
+
+  const filePath = filePaths[0];
+
+  const fileContents = await window.storage.readFile(filePath);
+  if (!fileContents) {
+    alert("Could not read file.");
+    return;
+  }
+
+  let parsed: any;
+  try {
+    parsed = JSON.parse(fileContents);
+  } catch {
+    alert("File is not valid JSON.");
+    return;
+  }
+
+  const error = validateChessGraphExport(parsed);
+  if (error) {
+    alert("Invalid ChessGraph export: " + error);
+    return;
+  }
+
+  const prepared = prepareForImport(parsed);
+
+  setPendingImportData(prepared);
+  setShowImportModal(true);
+};
+
 
   useEffect(() => {
     if (creatingFolder) newFolderRef.current?.focus();
@@ -393,6 +433,14 @@ const deleteFolder = async (folderId: string) => {
     setRepertoires(updatedRepertoires);
   };
 
+  const reloadData = async () => {
+  const folders = await window.storage.loadFolders();
+  setFolders(folders);
+
+  const reps = await window.storage.loadRepertoires();
+  setRepertoires(reps);
+};
+
  const filtered = search.trim()
   ? folders
       .map(folder => {
@@ -419,191 +467,137 @@ const deleteFolder = async (folderId: string) => {
       filteredRepertoires: repertoires.filter(r => r.folderId === folder.id)
     }));
 
+
+
   // ── Render ─────────────────────────────────────────────────────────────────
 
   return (
-    <div className="app-layout" style={{ display: 'flex', height: '100vh', background: '#1a1a1a', overflow: 'hidden' }}>
+  <div className="app-layout">
 
-      {/* Sidebar */}
-      <aside className="sidebar" style={{
-        width: 220, background: '#262522', display: 'flex',
-        flexDirection: 'column', padding: '20px 0', flexShrink: 0,
-        borderRight: '1px solid rgba(255,255,255,0.06)',
-      }}>
-        <div className="sidebar-logo" style={{
-          display: 'flex', alignItems: 'center', gap: 10,
-          padding: '0 20px 20px', borderBottom: '1px solid rgba(255,255,255,0.06)',
-          marginBottom: 12,
-        }}>
-          <i className="fa-solid fa-chess-knight" style={{ color: '#f0d9b5', fontSize: 20 }} />
-          <span style={{ fontWeight: 700, fontSize: 16, color: '#e8e0d5' }}>CTT</span>
+    {/* Sidebar */}
+    <aside className="sidebar">
+      <div className="sidebar-logo">
+        <i className="fa-solid fa-chess-knight" />
+        <span>CTT</span>
+      </div>
+
+      <nav className="sidebar-nav">
+        {[
+          { label: 'Repertoires', icon: 'fa-book-open', active: true, onClick: () => {} },
+          { label: 'Analytics', icon: 'fa-chart-line', active: false, onClick: () => setPage('analytics') },
+          { label: 'Training', icon: 'fa-dumbbell', active: false, onClick: () => setPage('tools') },
+        ].map(({ label, icon, active, onClick }) => (
+          <button
+            key={label}
+            className={active ? "nav-btn active" : "nav-btn"}
+            onClick={onClick}
+          >
+            <i className={`fa-solid ${icon}`} />
+            {label}
+          </button>
+        ))}
+      </nav>
+
+      <div className="sidebar-bottom">
+        {[
+          { label: 'Home', icon: 'fa-house', onClick: onBack },
+          { label: 'Settings', icon: 'fa-gear', onClick: () => setPage('settings') },
+        ].map(({ label, icon, onClick }) => (
+          <button key={label} className="nav-btn" onClick={onClick}>
+            <i className={`fa-solid ${icon}`} />
+            {label}
+          </button>
+        ))}
+      </div>
+    </aside>
+
+    {/* Main */}
+    <main className="main-content">
+
+      {/* Top bar */}
+      <div className="topbar">
+        <h1>Your Repertoires</h1>
+
+        <div className="topbar-actions">
+          <button className="btn-outline" onClick={() => setCreatingFolder(true)}>
+            <i className="fa-solid fa-folder-plus" />
+            New Folder
+          </button>
+
+          <button className="btn-primary" onClick={() => {/* TODO */}}>
+            <i className="fa-solid fa-plus" />
+            New Graph
+          </button>
+
+          <button className="btn-outline" onClick={handleImportClick}>
+            <i className="fa-solid fa-file-import" />
+            Import from Chess Graph
+          </button>
         </div>
+      </div>
 
-        <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 2, padding: '0 10px' }}>
-          {[
-            { label: 'Repertoires', icon: 'fa-book-open', active: true, onClick: () => {} },
-            { label: 'Analytics', icon: 'fa-chart-line', active: false, onClick: () => setPage('analytics') },
-            { label: 'Training', icon: 'fa-dumbbell', active: false, onClick: () => setPage('tools') },
-          ].map(({ label, icon, active, onClick }) => (
-            <button key={label} onClick={onClick} style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              padding: '9px 12px', borderRadius: 7, border: 'none', cursor: 'pointer',
-              background: active ? 'rgba(240,217,181,0.1)' : 'transparent',
-              color: active ? '#f0d9b5' : '#9a9080',
-              fontSize: 13, fontWeight: active ? 600 : 400,
-              transition: 'background 0.15s, color 0.15s',
-              textAlign: 'left', width: '100%',
-            }}
-              onMouseEnter={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)'; }}
-              onMouseLeave={e => { if (!active) (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; }}
-            >
-              <i className={`fa-solid ${icon}`} style={{ width: 16, textAlign: 'center' }} />
-              {label}
-            </button>
-          ))}
-        </nav>
-
-        <div style={{ padding: '12px 10px 0', borderTop: '1px solid rgba(255,255,255,0.06)' }}>
-          {[
-            { label: 'Home', icon: 'fa-house', onClick: onBack },
-            { label: 'Settings', icon: 'fa-gear', onClick: () => setPage('settings') },
-          ].map(({ label, icon, onClick }) => (
-            <button key={label} onClick={onClick} style={{
-              display: 'flex', alignItems: 'center', gap: 10,
-              padding: '9px 12px', borderRadius: 7, border: 'none', cursor: 'pointer',
-              background: 'transparent', color: '#9a9080',
-              fontSize: 13, width: '100%', textAlign: 'left',
-              transition: 'background 0.15s, color 0.15s',
-            }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = 'rgba(255,255,255,0.05)'; (e.currentTarget as HTMLButtonElement).style.color = '#c0b8b0'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = 'transparent'; (e.currentTarget as HTMLButtonElement).style.color = '#9a9080'; }}
-            >
-              <i className={`fa-solid ${icon}`} style={{ width: 16, textAlign: 'center' }} />
-              {label}
-            </button>
-          ))}
+      {/* Search */}
+      <div className="search-container">
+        <div className="search-wrapper">
+          <i className="fa-solid fa-magnifying-glass search-icon" />
+          <input
+            className="search-input"
+            value={search}
+            onChange={e => setSearch(e.target.value)}
+            placeholder="Search repertoires..."
+          />
         </div>
-      </aside>
+      </div>
 
-      {/* Main */}
-      <main style={{ flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }}>
-
-        {/* Top bar */}
-        <div style={{
-          display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-          padding: '28px 36px 20px', flexShrink: 0,
-        }}>
-          <h1 style={{ margin: 0, fontSize: 26, fontWeight: 700, color: '#e8e0d5' }}>
-            Your Repertoires
-          </h1>
-          <div style={{ display: 'flex', gap: 10 }}>
-            <button
-              onClick={() => setCreatingFolder(true)}
-              style={{
-                padding: '8px 16px', borderRadius: 8,
-                border: '1px solid rgba(255,255,255,0.15)',
-                background: 'transparent', color: '#c0b8b0',
-                fontSize: 13, fontWeight: 500, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 7,
-                transition: 'border-color 0.15s, color 0.15s',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(240,217,181,0.4)'; (e.currentTarget as HTMLButtonElement).style.color = '#f0d9b5'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.borderColor = 'rgba(255,255,255,0.15)'; (e.currentTarget as HTMLButtonElement).style.color = '#c0b8b0'; }}
-            >
-              <i className="fa-solid fa-folder-plus" style={{ fontSize: 12 }} />
-              New Folder
-            </button>
-            <button
-              onClick={() => {/* add file later */}}
-              style={{
-                padding: '8px 16px', borderRadius: 8,
-                border: 'none', background: '#5b8dd9', color: '#fff',
-                fontSize: 13, fontWeight: 600, cursor: 'pointer',
-                display: 'flex', alignItems: 'center', gap: 7,
-                transition: 'background 0.15s',
-              }}
-              onMouseEnter={e => { (e.currentTarget as HTMLButtonElement).style.background = '#4a7bc8'; }}
-              onMouseLeave={e => { (e.currentTarget as HTMLButtonElement).style.background = '#5b8dd9'; }}
-            >
-              <i className="fa-solid fa-plus" style={{ fontSize: 12 }} />
-              New Graph
-            </button>
-          </div>
-        </div>
-
-        {/* Search */}
-        <div style={{ padding: '0 36px 20px', flexShrink: 0 }}>
-          <div style={{ position: 'relative', maxWidth: 600 }}>
-            <i className="fa-solid fa-magnifying-glass" style={{
-              position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)',
-              color: '#6e6560', fontSize: 13, pointerEvents: 'none',
-            }} />
+      {/* New folder inline input */}
+      {creatingFolder && (
+        <div className="new-folder-container">
+          <div className="new-folder-input">
+            <i className="fa-solid fa-folder" />
             <input
-              value={search}
-              onChange={e => setSearch(e.target.value)}
-              placeholder="Search repertoires..."
-              style={{
-                width: '100%', padding: '10px 14px 10px 38px',
-                background: '#2a2725', border: '1px solid rgba(255,255,255,0.08)',
-                borderRadius: 8, color: '#e8e0d5', fontSize: 13,
-                outline: 'none', boxSizing: 'border-box',
-                transition: 'border-color 0.15s',
+              ref={newFolderRef}
+              value={newFolderName}
+              onChange={e => setNewFolderName(e.target.value)}
+              placeholder="Folder name..."
+              onKeyDown={e => {
+                if (e.key === 'Enter') createFolder();
+                if (e.key === 'Escape') setCreatingFolder(false);
               }}
-              onFocus={e => { (e.target as HTMLInputElement).style.borderColor = 'rgba(240,217,181,0.3)'; }}
-              onBlur={e => { (e.target as HTMLInputElement).style.borderColor = 'rgba(255,255,255,0.08)'; }}
+              onBlur={createFolder}
             />
           </div>
         </div>
+      )}
 
-        {/* New folder inline input */}
-        {creatingFolder && (
-          <div style={{ padding: '0 36px 20px', flexShrink: 0 }}>
-            <div style={{
-              display: 'flex', alignItems: 'center', gap: 8,
-              background: '#2a2725', border: '1px solid rgba(240,217,181,0.3)',
-              borderRadius: 8, padding: '10px 14px', maxWidth: 360,
-            }}>
-              <i className="fa-solid fa-folder" style={{ color: '#9a9080', fontSize: 13 }} />
-              <input
-                ref={newFolderRef}
-                value={newFolderName}
-                onChange={e => setNewFolderName(e.target.value)}
-                placeholder="Folder name..."
-                onKeyDown={e => { if (e.key === 'Enter') createFolder(); if (e.key === 'Escape') setCreatingFolder(false); }}
-                onBlur={createFolder}
-                style={{
-                  flex: 1, background: 'none', border: 'none',
-                  color: '#e8e0d5', fontSize: 13, outline: 'none',
-                }}
-              />
-            </div>
-          </div>
-        )}
-
-        {/* Folder list */}
-        <div style={{ flex: 1, overflowY: 'auto', padding: '0 36px 36px' }}>
-          {filtered.length === 0 ? (
-            <div style={{ color: '#6e6560', fontSize: 14, marginTop: 40, textAlign: 'center' }}>
-              No repertoires found.
-            </div>
-          ) : (
-            filtered.map(folder => (
-              <FolderSelection
-              key={folder.id}
-              folder={folder}
-              repertoires={folder.filteredRepertoires}
-              onToggle={toggleFolder}
-              onRenameFolder={renameFolder}
-              onRenameRepertoire={renameRepertoire}
-               onSelectRepertoire={selectRepertoire}
-               onDeleteFolder={deleteFolder}
-              />
-            ))
-          )}
-        </div>
-      </main>
-    </div>
-  );
+      {/* Folder list */}
+     <div className="folder-list">
+  {filtered.length === 0 ? (
+    <div className="empty-message">No repertoires found.</div>
+  ) : (
+    filtered.map(folder => (
+      <FolderSelection
+        key={folder.id}
+        folder={folder}
+        repertoires={folder.filteredRepertoires}
+        onToggle={toggleFolder}
+        onRenameFolder={renameFolder}
+        onRenameRepertoire={renameRepertoire}
+        onSelectRepertoire={selectRepertoire}
+        onDeleteFolder={deleteFolder}
+      />
+    ))
+  )}
+</div>
+    </main>
+    {showImportModal && pendingImportData && (
+  <ImportModal
+  data={pendingImportData}
+  onClose={() => setShowImportModal(false)}
+  reloadData={reloadData}
+/>
+)}
+  </div>
+);
 };
 
 export default EditRepertoires;

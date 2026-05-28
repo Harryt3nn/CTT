@@ -6,10 +6,13 @@ export {};
 declare global {
   interface Window {
     storage: {
-      loadFolders(): Promise<Folder[]>;
-      saveFolders(folders: Folder[]): Promise<void>;
-      loadRepertoires(): Promise<Repertoire[]>;
-      saveRepertoire(rep: Repertoire): Promise<void>;
+      loadFolders(): Promise<any[]>;
+      saveFolders(folders: any[]): Promise<void>;
+      loadRepertoires(): Promise<any[]>;
+      saveRepertoire(rep: any): Promise<void>;
+      openFileDialog(options: Electron.OpenDialogOptions): Promise<string[]>;
+      readFile(filePath: string): Promise<string>;
+      importRepertoires(payload: ImportRepertoiresPayload): Promise<{ success: boolean }>;
     };
   }
 }

@@ -3,7 +3,7 @@ import EditRepertiores from './pages/EditRepertiores';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import TrainingToolkit from './pages/TrainingToolkit';
-
+import { toast } from "react-toastify";
 
 
 const App = () => {
