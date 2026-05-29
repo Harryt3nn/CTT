@@ -1,7 +1,13 @@
+/*src/preload.ts*/
+
 import { contextBridge, ipcRenderer, } from "electron";
 import type { Folder } from "./types/Folder";
 import type { Repertoire } from "./types/Repertoire";
 import { ImportRepertoiresPayload } from "./types/ImportPayload";
+
+// the only place where the renderer can communicate with main processes
+// renderer cannot access Node.js APIs directly
+// ensures type safety (this is why we don't use Javascript)
 
 contextBridge.exposeInMainWorld("storage", {
   loadFolders: (): Promise<Folder[]> =>

@@ -1,3 +1,5 @@
+/*src/pages/EditRepertiores.tsx*/
+
 import React, { useState, useEffect, useRef } from 'react';
 import Analytics from './Analytics';
 import Settings from './Settings';
@@ -47,19 +49,11 @@ function generateId(): string {
 
 
 function ChessKnightIcon({ color }: { color: "white" | "black" }) {
-  const isWhite = color === 'white';
+  const isWhite = color === "white";
+
   return (
-    <div style={{
-      width: 32, height: 32, borderRadius: 6,
-      background: isWhite ? 'rgba(240,217,181,0.15)' : 'rgba(100,80,60,0.25)',
-      border: `1px solid ${isWhite ? 'rgba(240,217,181,0.3)' : 'rgba(150,120,90,0.3)'}`,
-      display: 'flex', alignItems: 'center', justifyContent: 'center',
-      flexShrink: 0,
-    }}>
-      <i className="fa-solid fa-chess-queen" style={{
-        fontSize: 14,
-        color: isWhite ? '#f0d9b5' : '#b58863',
-      }} />
+    <div className={`knight-icon ${isWhite ? "knight-white" : "knight-black"}`}>
+      <i className={`fa-solid fa-chess-queen knight-piece ${isWhite ? "piece-white" : "piece-black"}`} />
     </div>
   );
 }
@@ -68,10 +62,12 @@ function InlineEdit({
   value,
   onSave,
   style,
+  className,
 }: {
   value: string;
   onSave: (v: string) => void;
   style?: React.CSSProperties;
+  className?: string;
 }) {
   const [editing, setEditing] = useState(false);
   const [draft, setDraft] = useState(value);
@@ -108,18 +104,8 @@ function InlineEdit({
             setEditing(false);
           }
         }}
-        style={{
-          background: "rgba(255,255,255,0.08)",
-          border: "1px solid rgba(240,217,181,0.4)",
-          borderRadius: 4,
-          color: "#e8e0d5",
-          padding: "2px 6px",
-          fontSize: "inherit",
-          fontFamily: "inherit",
-          fontWeight: "inherit",
-          outline: "none",
-          ...style,
-        }}
+        className={`inline-edit-input ${className ?? ""}`}
+        style={style}
       />
     );
   }
@@ -131,7 +117,8 @@ function InlineEdit({
         setEditing(true);
       }}
       title="Double-click to rename"
-      style={{ cursor: "text", ...style }}
+      className={`inline-edit-text ${className ?? ""}`}
+      style={style}
     >
       {value}
     </span>
@@ -149,54 +136,21 @@ function RepertoireCard({
 }) {
   return (
     <div
+      className="rep-card"
       onClick={() => onSelect(file.id)}
-      style={{
-        background: "#2a2725",
-        border: "1px solid rgba(255,255,255,0.07)",
-        borderRadius: 10,
-        padding: "16px 18px",
-        cursor: "pointer",
-        transition: "border-color 0.15s, background 0.15s, transform 0.1s",
-        display: "flex",
-        flexDirection: "column",
-        gap: 8,
-        minHeight: 110,
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "rgba(240,217,181,0.3)";
-        e.currentTarget.style.background = "#302e2c";
-        e.currentTarget.style.transform = "translateY(-1px)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)";
-        e.currentTarget.style.background = "#2a2725";
-        e.currentTarget.style.transform = "none";
-      }}
     >
-      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+      <div className="rep-card-header">
         <ChessKnightIcon color={file.side} />
 
         <InlineEdit
           value={file.name}
           onSave={(name) => onRename(file.id, name)}
-          style={{
-            fontWeight: 600,
-            fontSize: 15,
-            color: "#e8e0d5",
-            flex: 1,
-          }}
+          style={{ flex: 1 }}
+          className="rep-card-title"
         />
       </div>
 
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: "auto",
-          fontSize: 12,
-          color: "#6e6560",
-        }}
-      >
+      <div className="rep-card-footer">
         <span>Repertoire</span>
         <span>{timeAgo(file.updatedAt)}</span>
       </div>
@@ -221,64 +175,32 @@ function FolderSection({
   onSelectFile: (fileId: string) => void;
 }) {
   return (
-    <div style={{ marginBottom: 28 }}>
+    <div className="folder-section">
       {/* Folder header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 8,
-          marginBottom: 14,
-          color: "#9a9080",
-        }}
-      >
+      <div className="folder-section-header">
         <button
           onClick={() => onToggle(folder.id)}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            color: "#9a9080",
-            padding: 0,
-            display: "flex",
-            alignItems: "center",
-            transition: "transform 0.2s",
-            transform: folder.collapsed ? "rotate(-90deg)" : "rotate(0deg)",
-          }}
+          className={`folder-chevron ${folder.collapsed ? "collapsed" : ""}`}
         >
-          <i className="fa-solid fa-chevron-down" style={{ fontSize: 11 }} />
+          <i className="fa-solid fa-chevron-down folder-chevron-icon" />
         </button>
 
-        <i className="fa-solid fa-folder" style={{ fontSize: 13 }} />
+        <i className="fa-solid fa-folder folder-icon" />
 
         <InlineEdit
           value={folder.name}
           onSave={(name) => onRenameFolder(folder.id, name)}
-          style={{ fontWeight: 600, fontSize: 14, color: "#c0b8b0" }}
+          className="folder-section-title"
         />
 
-        <span style={{ fontSize: 12, marginLeft: 2, color: "#6e6560" }}>
-          {files.length}
-        </span>
+        <span className="folder-section-count">{files.length}</span>
       </div>
 
       {/* Cards grid */}
       {!folder.collapsed && (
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))",
-            gap: 12,
-          }}
-        >
+        <div className="folder-section-grid">
           {files.length === 0 && (
-            <div
-              style={{
-                color: "#6e6560",
-                fontSize: 13,
-                padding: "8px 4px",
-              }}
-            >
+            <div className="folder-section-empty">
               No repertoires in this folder
             </div>
           )}
@@ -296,6 +218,7 @@ function FolderSection({
     </div>
   );
 }
+
 
 
 
@@ -479,7 +402,7 @@ const reloadData = async () => {
     {/* Sidebar */}
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <i className="fa-solid fa-chess-knight" />
+        <i className="fa-solid fa-chess-queen" />
         <span>CTT</span>
       </div>
 
@@ -602,4 +525,4 @@ const reloadData = async () => {
 );
 };
 
-export default EditRepertoires;
+export default EditRepertoires

@@ -1,3 +1,4 @@
+/*src/types/Node.ts*/
 export interface Node {
   id: string;
   parentId: string | null;

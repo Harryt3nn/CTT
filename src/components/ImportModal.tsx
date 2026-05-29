@@ -1,6 +1,14 @@
+/*src/components/ImportModal.tsx*/
+
 import React, { useState } from "react";
 import type { PreparedImportData } from "../importsAndExports/prepareForImport";
 import { toast } from "react-toastify";
+
+// UI component for importing chess graph JSON via 'prepareForImport' pipeline
+// reads imported file, allows for import selection by the user
+// selected imports are added to the tree
+// returns raw html
+
 export function ImportModal({
   data,
   onClose,
@@ -34,12 +42,15 @@ export function ImportModal({
   onClose();
 };
 
+// render: overlay for import
   return (
     <div className="modal-backdrop">
       <div className="modal-window">
 
         <h2>Import from Chess Graph</h2>
-        <p>Select repertoires to import. Folders + nodes will be saved automatically.</p>
+        <p>Select repertoires to import. Folders + nodes will be saved automatically.
+
+        </p>
 
         <div className="folder-view">
           {data.folders.map(folder => {

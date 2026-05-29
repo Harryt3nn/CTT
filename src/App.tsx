@@ -1,24 +1,31 @@
+/*src/App.tsx*/
+
 import React, { useState } from 'react';
 import EditRepertiores from './pages/EditRepertiores';
 import Analytics from './pages/Analytics';
 import Settings from './pages/Settings';
 import TrainingToolkit from './pages/TrainingToolkit';
+import BoardView from './pages/BoardView';
 import { toast } from "react-toastify";
 
+//This page acts as the top level router for the entire App, basically a home page
 
 const App = () => {
   const [page, setPage] = useState('home');
+
+  //holds global page state and returns raw html to render the correct page
 
   if (page === 'repertoires') return <EditRepertiores onBack={() => setPage('home')} />;
   if (page === 'analytics') return <Analytics onBack={() => setPage('home')} />;
   if (page === 'tools') return <TrainingToolkit onBack={() => setPage('home')} />;
   if (page === 'settings') return <Settings onBack={() => setPage('home')} />;
+  if (page === 'board') return <BoardView onBack={() => setPage('home')} />;
 
  return (
   <div className="app-layout">
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <i className="fa-solid fa-chess-knight"></i>
+        <i className="fa-solid fa-chess-queen"></i>
         <span>CTT</span>
       </div>
       <nav className="sidebar-nav">
@@ -33,6 +40,10 @@ const App = () => {
         <button onClick={() => setPage('tools')}>
           <i className="fa-solid fa-dumbbell"></i>
           <span>Training</span>
+        </button>
+        <button onClick={() => setPage('board')}>
+          <i className="fa-solid fa-chess-board"></i>
+          <span>Board</span>
         </button>
       </nav>
        <div className="sidebar-bottom">

@@ -1,5 +1,10 @@
+/* src/components/RepertoireRow.tsx */
+
 import React, { useState, useRef } from "react";
 import type { Repertoire } from "../types/Repertoire";
+
+// small UI component for individual graphs inside an opened folder
+// returns raw html
 
 interface Props {
   rep: Repertoire;
@@ -19,17 +24,13 @@ const RepertoireRow: React.FC<Props> = ({ rep, onRename, onSelect }) => {
     else setName(rep.name);
   };
 
+  //render
   return (
     <div
-      style={{
-        display: "flex",
-        alignItems: "center",
-        gap: 8,
-        cursor: "pointer"
-      }}
+      className="rep-row"
       onClick={() => onSelect(rep.id)}
     >
-      <i className="fa-solid fa-chess-board" style={{ color: "#9a9080", width: 14 }} />
+      <i className="fa-solid fa-chess-board rep-row-icon" />
 
       {editing ? (
         <input
@@ -44,18 +45,11 @@ const RepertoireRow: React.FC<Props> = ({ rep, onRename, onSelect }) => {
               setName(rep.name);
             }
           }}
-          style={{
-            background: "none",
-            border: "1px solid rgba(255,255,255,0.2)",
-            borderRadius: 4,
-            padding: "2px 6px",
-            color: "#e8e0d5",
-            fontSize: 13
-          }}
+          className="rep-row-input"
         />
       ) : (
         <span
-          style={{ color: "#c0b8b0", fontSize: 14 }}
+          className="rep-row-name"
           onDoubleClick={e => {
             e.stopPropagation();
             setEditing(true);

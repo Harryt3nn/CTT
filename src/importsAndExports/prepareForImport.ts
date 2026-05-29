@@ -1,6 +1,11 @@
+/*src/importsAndExports/prepareForImports*/
+
 import { Node } from "../types/Node";
 import type { Folder } from "../types/Folder";
 import type { Repertoire } from "../types/Repertoire";
+
+// takes poorly arranged chess graph JSON data and converts it into CTTs filesystem template
+// all types defined in a way that objects in CTT and chess graph are compatible
 
 export type PreparedImportData = {
   folders: Folder[];
@@ -11,7 +16,10 @@ export type PreparedImportData = {
 export function prepareForImport(data: any): PreparedImportData {
   const now = Date.now();
 
-  // Normalise nodes — chessgraph exports as array, we store as map
+// normalised data is now stored as a map
+
+// extract nodes
+
   const normalisedNodes: Record<string, Node> = {};
   const nodesArray: any[] = Array.isArray(data.nodes)
     ? data.nodes
@@ -28,7 +36,8 @@ export function prepareForImport(data: any): PreparedImportData {
     };
   }
 
-  // Extract folders
+  // extract folders
+
   const folders: Folder[] = Array.isArray(data.folders)
     ? data.folders.map((f: any) => ({
         id: f.id,
@@ -40,7 +49,8 @@ export function prepareForImport(data: any): PreparedImportData {
       }))
     : [];
 
-  // Extract repertoires
+  // extract repertoires
+
   const repertoires: Repertoire[] = data.repertoires.map((rep: any) => ({
     id: rep.id,
     name: rep.name,
@@ -50,6 +60,8 @@ export function prepareForImport(data: any): PreparedImportData {
     createdAt: rep.createdAt ?? now,
     updatedAt: rep.updatedAt ?? now,
   }));
+
+  // normalised data is returned
 
   return {
     folders,

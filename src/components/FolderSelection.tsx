@@ -1,8 +1,17 @@
+/* src/components/FolderSelection.tsx */
+
 import React, { useState, useRef } from "react";
 import type { Folder } from "../types/Folder";
 import type { Repertoire } from "../types/Repertoire";
 import RepertoireRow from "./RepertoireRow";
 
+// UI component to display available 'folders' (JSON objects)
+// ensures folders can collapse
+// functions: collapse, rename (rep + folder), select, delete
+// returns raw html
+
+
+// predefine all operations
 interface FolderSelectionProps {
   folder: Folder;
   repertoires: Repertoire[];
@@ -13,6 +22,7 @@ interface FolderSelectionProps {
   onDeleteFolder: (id: string) => void;
 }
 
+// folder names cannot be too long (for optimal display)
 const MAX_FOLDER_NAME = 32;
 
 const FolderSelection: React.FC<FolderSelectionProps> = ({
@@ -28,6 +38,7 @@ const FolderSelection: React.FC<FolderSelectionProps> = ({
   const [folderName, setFolderName] = useState(folder.name);
   const folderInputRef = useRef<HTMLInputElement>(null);
 
+  // name cannot be empty
   const startFolderRename = () => {
     setEditingFolder(true);
     setTimeout(() => folderInputRef.current?.focus(), 0);
@@ -50,21 +61,14 @@ const FolderSelection: React.FC<FolderSelectionProps> = ({
     onRenameFolder(folder.id, trimmed);
   };
 
+  // render:
   return (
-    <div style={{ marginBottom: 24 }}>
+    <div className="folder-block">
       {/* Folder Header */}
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: 10,
-          padding: "6px 0"
-        }}
-      >
+      <div className="folder-header">
         {/* Expand/Collapse */}
         <i
-          className={`fa-solid ${folder.collapsed ? "fa-folder" : "fa-folder-open"}`}
-          style={{ color: "#c0b8b0", width: 16, cursor: "pointer" }}
+          className={`fa-solid ${folder.collapsed ? "fa-folder" : "fa-folder-open"} folder-icon`}
           onClick={() => onToggle(folder.id)}
         />
 
@@ -73,7 +77,7 @@ const FolderSelection: React.FC<FolderSelectionProps> = ({
           <input
             ref={folderInputRef}
             value={folderName}
-            maxLength={MAX_FOLDER_NAME + 5} // allow typing but validate on save
+            maxLength={MAX_FOLDER_NAME + 5}
             onChange={e => setFolderName(e.target.value)}
             onBlur={finishFolderRename}
             onKeyDown={e => {
@@ -83,34 +87,19 @@ const FolderSelection: React.FC<FolderSelectionProps> = ({
                 setFolderName(folder.name);
               }
             }}
-            style={{
-              background: "none",
-              border: folderName.length > MAX_FOLDER_NAME
-                ? "1px solid #b55"
-                : "1px solid rgba(255,255,255,0.2)",
-              borderRadius: 4,
-              padding: "2px 6px",
-              color: "#e8e0d5",
-              fontSize: 14
-            }}
+            className={`folder-input ${
+              folderName.length > MAX_FOLDER_NAME ? "folder-input-error" : ""
+            }`}
           />
         ) : (
-          <span style={{ color: "#e8e0d5", fontSize: 15 }}>
-            {folder.name}
-          </span>
+          <span className="folder-name">{folder.name}</span>
         )}
 
         {/* RENAME BUTTON */}
         {!editingFolder && (
           <button
             onClick={startFolderRename}
-            style={{
-              background: "none",
-              border: "none",
-              color: "#c0b8b0",
-              cursor: "pointer",
-              padding: 4
-            }}
+            className="folder-btn folder-btn-rename"
             title="Rename folder"
           >
             <i className="fa-solid fa-pen" />
@@ -120,13 +109,7 @@ const FolderSelection: React.FC<FolderSelectionProps> = ({
         {/* DELETE BUTTON */}
         <button
           onClick={() => onDeleteFolder(folder.id)}
-          style={{
-            background: "none",
-            border: "none",
-            color: "#a86a6a",
-            cursor: "pointer",
-            padding: 4
-          }}
+          className="folder-btn folder-btn-delete"
           title="Delete folder"
         >
           <i className="fa-solid fa-trash" />
@@ -135,17 +118,9 @@ const FolderSelection: React.FC<FolderSelectionProps> = ({
 
       {/* Repertoires */}
       {!folder.collapsed && (
-        <div
-          style={{
-            marginLeft: 26,
-            marginTop: 6,
-            display: "flex",
-            flexDirection: "column",
-            gap: 6
-          }}
-        >
+        <div className="repertoire-list">
           {repertoires.length === 0 ? (
-            <div style={{ color: "#6e6560", fontSize: 13 }}>No repertoires</div>
+            <div className="repertoire-empty">No repertoires</div>
           ) : (
             repertoires.map(rep => (
               <RepertoireRow

@@ -1,3 +1,5 @@
+/*src/index.ts*/
+
 import { app, BrowserWindow, ipcMain, dialog, IpcMainInvokeEvent, OpenDialogOptions } from "electron";
 import fs from "fs";
 import path from "path";
@@ -10,12 +12,18 @@ import {
   saveRepertoires
 } from "./Storage/MainStorage";
 
+// main electron process
+// creates application window, handles IPC requests from renderer, manages filesystem
+// 'backend' of the app
+
 declare const MAIN_WINDOW_WEBPACK_ENTRY: string;
 declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 const DATA_DIR = path.join(app.getPath("userData"), "ctt-data");
 const FOLDERS_PATH = path.join(DATA_DIR, "folders.json");
 const REPS_DIR = path.join(DATA_DIR, "repositories");
+
+// ensures correct directories
 
 function ensureDirs() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -24,6 +32,8 @@ function ensureDirs() {
     fs.writeFileSync(FOLDERS_PATH, JSON.stringify({ folders: [] }, null, 2));
   }
 }
+
+// all IPC functions
 
 ipcMain.handle("storage:loadFolders", async () => {
   ensureDirs();
@@ -76,6 +86,8 @@ ipcMain.handle(
 ipcMain.handle("storage:importRepertoires", async (_, payload) => {
   return await importRepertoires(payload);
 });
+
+// creation of window object
 
 const createWindow = (): void => {
   const mainWindow = new BrowserWindow({

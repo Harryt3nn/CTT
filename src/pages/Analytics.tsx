@@ -1,7 +1,11 @@
+/*src/pages/Analytics.tsx*/
+
 import React, { useState } from 'react';
 import App from '../App';
 import Settings from './Settings';
 import TrainingToolkit from './TrainingToolkit';
+
+// returns raw html for analytics page
 
 type Page = 'home' | 'analytics' | 'tools' | 'settings' | 'repertoires';
 
@@ -15,7 +19,7 @@ const Analytics = ({ onBack }: { onBack: () => void }) => {
         <div className="app-layout">
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <i className="fa-solid fa-chess-knight"></i>
+        <i className="fa-solid fa-chess-queen"></i>
         <span>CTT</span>
       </div>
       <nav className="sidebar-nav">

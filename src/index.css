@@ -1,4 +1,4 @@
-/* index.css */
+/* src/index.css */
 * {
   margin: 0;
   padding: 0;
@@ -334,4 +334,396 @@ body {
 .empty {
   opacity: 0.5;
   font-style: italic;
+}
+
+/* BoardView */
+.board-view-main {
+  display: flex;
+  gap: 32px;
+  padding: 32px;
+  align-items: flex-start;
+}
+
+.board-container {
+  width: 560px;
+  flex-shrink: 0;
+}
+
+.board-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.board-panel-title {
+  margin: 0;
+  color: #e8e0d5;
+}
+
+.move-history {
+  background: #2a2725;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 200px;
+  color: #c0b8b0;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.move-history-empty {
+  color: #6e6560;
+}
+
+.move-number {
+  color: #6e6560;
+  margin-right: 4px;
+}
+
+.move-text {
+  margin-right: 12px;
+}
+
+.btn-reset {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #5b8dd9;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.btn-reset:hover {
+  background: #4a7bc8;
+}
+
+/* Highlight: selected square (yellow tint) */
+.highlight-selected {
+  background-color: rgba(255, 255, 0, 0.25) !important;
+}
+
+/* Highlight: legal move dot */
+.highlight-dot {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 20%, transparent 21%) !important;
+}
+
+/* Ensure dot is centered */
+.highlight-dot::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Optional: smooth highlight transitions */
+.highlight-selected,
+.highlight-dot {
+  transition: background 0.15s ease;
+}
+
+/* Selected square highlight (yellow tint, like lichess/chess.com) */
+.highlight-selected {
+  background-color: rgba(255, 255, 0, 0.25) !important;
+}
+
+/* Legal move dot (centered dark dot) */
+.highlight-dot {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 20%, transparent 21%) !important;
+}
+
+/* Optional: smooth transitions for highlights */
+.highlight-selected,
+.highlight-dot {
+  transition: background 0.15s ease;
+}
+
+:root {
+  --highlight-selected: rgba(255, 255, 0, 0.25);
+  --highlight-dot: radial-gradient(circle, rgba(0, 0, 0, 0.3) 20%, transparent 21%);
+}
+
+/* Folder container */
+.folder-block {
+  margin-bottom: 24px;
+}
+
+/* Header row */
+.folder-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+/* Folder icon */
+.folder-icon {
+  color: #c0b8b0;
+  width: 16px;
+  cursor: pointer;
+}
+
+/* Folder name text */
+.folder-name {
+  color: #e8e0d5;
+  font-size: 15px;
+}
+
+/* Folder rename input */
+.folder-input {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: #e8e0d5;
+  font-size: 14px;
+}
+
+.folder-input-error {
+  border-color: #b55;
+}
+
+/* Buttons (rename/delete) */
+.folder-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.folder-btn-rename {
+  color: #c0b8b0;
+}
+
+.folder-btn-delete {
+  color: #a86a6a;
+}
+
+/* Repertoire list */
+.repertoire-list {
+  margin-left: 26px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Empty state */
+.repertoire-empty {
+  color: #6e6560;
+  font-size: 13px;
+}
+
+/* Container for each repertoire row */
+.rep-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* Icon */
+.rep-row-icon {
+  color: #9a9080;
+  width: 14px;
+}
+
+/* Name text */
+.rep-row-name {
+  color: #c0b8b0;
+  font-size: 14px;
+}
+
+/* Input when renaming */
+.rep-row-input {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: #e8e0d5;
+  font-size: 13px;
+}
+
+/* Knight icon container */
+.knight-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* White knight background + border */
+.knight-white {
+  background: rgba(240, 217, 181, 0.15);
+  border: 1px solid rgba(240, 217, 181, 0.3);
+}
+
+/* Black knight background + border */
+.knight-black {
+  background: rgba(100, 80, 60, 0.25);
+  border: 1px solid rgba(150, 120, 90, 0.3);
+}
+
+/* Icon inside */
+.knight-piece {
+  font-size: 14px;
+}
+
+/* Icon colours */
+.piece-white {
+  color: #f0d9b5;
+}
+
+.piece-black {
+  color: #b58863;
+}
+
+/* InlineEdit — input mode */
+.inline-edit-input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(240, 217, 181, 0.4);
+  border-radius: 4px;
+  color: #e8e0d5;
+  padding: 2px 6px;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  outline: none;
+}
+
+/* InlineEdit — text mode */
+.inline-edit-text {
+  cursor: text;
+}
+/* ──────────────────────────────────────────────── */
+/* Repertoire Card Container */
+/* ──────────────────────────────────────────────── */
+
+.rep-card {
+  background: #2a2725;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 16px 18px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 110px;
+
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+
+.rep-card:hover {
+  border-color: rgba(240, 217, 181, 0.3);
+  background: #302e2c;
+  transform: translateY(-1px);
+}
+
+/* ──────────────────────────────────────────────── */
+/* Header Row */
+/* ──────────────────────────────────────────────── */
+
+.rep-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Title text inside InlineEdit */
+.rep-card-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #e8e0d5;
+}
+
+/* ──────────────────────────────────────────────── */
+/* Footer Row */
+/* ──────────────────────────────────────────────── */
+
+.rep-card-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  font-size: 12px;
+  color: #6e6560;
+}
+
+/* ───────────────────────────────────────────── */
+/* Folder Section Wrapper */
+/* ───────────────────────────────────────────── */
+
+.folder-section {
+  margin-bottom: 28px;
+}
+
+/* ───────────────────────────────────────────── */
+/* Header Row */
+/* ───────────────────────────────────────────── */
+
+.folder-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: #9a9080;
+}
+
+/* Chevron button */
+.folder-chevron {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9a9080;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.folder-chevron.collapsed {
+  transform: rotate(-90deg);
+}
+
+.folder-chevron-icon {
+  font-size: 11px;
+}
+
+/* Folder icon */
+.folder-icon {
+  font-size: 13px;
+}
+
+/* Folder name (InlineEdit) */
+.folder-section-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #c0b8b0;
+}
+
+/* File count */
+.folder-section-count {
+  font-size: 12px;
+  margin-left: 2px;
+  color: #6e6560;
+}
+
+/* ───────────────────────────────────────────── */
+/* Grid of Repertoire Cards */
+/* ───────────────────────────────────────────── */
+
+.folder-section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+/* Empty message */
+.folder-section-empty {
+  color: #6e6560;
+  font-size: 13px;
+  padding: 8px 4px;
 }

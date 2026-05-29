@@ -1,7 +1,12 @@
+/*src/types/global.d.ts*/
+
 import type { Folder } from "./Folder";
 import type { Repertoire } from "./Repertoire";
 
 export {};
+
+// extension of global window object to include custom APIs in src/preload/ts
+// functions are IPC safe wrappers around filesystem operations
 
 declare global {
   interface Window {
