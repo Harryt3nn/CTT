@@ -1,0 +1,729 @@
+/* src/index.css */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: #1a1a1a;
+  color: #e0d7d0;
+  font-family: 'Segoe UI', sans-serif;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.app-layout {
+  display: flex;
+  height: 100vh;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 220px;
+  background: #262522;
+  display: flex;
+  flex-direction: column;
+  padding: 16px 0;
+  border-right: 1px solid #3a3733;
+  flex-shrink: 0;
+}
+
+.sidebar-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 20px 24px;
+  font-size: 20px;
+  font-weight: 700;
+  color: #f0d9b5;
+}
+
+.sidebar-logo i {
+  font-size: 24px;
+}
+
+.sidebar-nav {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: 4px;
+  padding: 0 8px;
+}
+
+.sidebar-nav button,
+.sidebar-bottom button {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  color: #b0a090;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  text-align: left;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sidebar-nav button:hover,
+.sidebar-bottom button:hover {
+  background: #3a3733;
+  color: #f0d9b5;
+}
+
+.sidebar-nav button i,
+.sidebar-bottom button i {
+  width: 18px;
+  text-align: center;
+}
+
+.sidebar-bottom {
+  padding: 0 8px;
+  border-top: 1px solid #3a3733;
+  padding-top: 8px;
+}
+
+/* Main content */
+.main-content {
+  flex: 1;
+  padding: 40px;
+  overflow-y: auto;
+}
+
+.main-content h1 {
+  font-size: 28px;
+  color: #f0d9b5;
+  margin-bottom: 8px;
+}
+
+.main-content p {
+  color: #888;
+}
+
+/* Top bar actions container */
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Outline button (New Folder, Import) */
+.btn-outline {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: #c0b8b0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-outline:hover {
+  border-color: rgba(240,217,181,0.4);
+  color: #f0d9b5;
+}
+
+/* Primary button (New Graph) */
+.btn-primary {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #5b8dd9;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover {
+  background: #4a7bc8;
+}
+
+.btn-outline i,
+.btn-primary i {
+  font-size: 12px;
+}
+/* Top bar */
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 28px 36px 20px;
+}
+
+.topbar-actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* Buttons */
+.btn-outline {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.15);
+  background: transparent;
+  color: #c0b8b0;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: border-color 0.15s, color 0.15s;
+}
+
+.btn-outline:hover {
+  border-color: rgba(240,217,181,0.4);
+  color: #f0d9b5;
+}
+
+.btn-primary {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #5b8dd9;
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  transition: background 0.15s;
+}
+
+.btn-primary:hover {
+  background: #4a7bc8;
+}
+
+/* Search */
+.search-container {
+  padding: 0 36px 20px;
+}
+
+.search-wrapper {
+  position: relative;
+  max-width: 600px;
+}
+
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #6e6560;
+  font-size: 13px;
+}
+
+.search-input {
+  width: 100%;
+  padding: 10px 14px 10px 38px;
+  background: #2a2725;
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 8px;
+  color: #e8e0d5;
+  font-size: 13px;
+  outline: none;
+}
+
+/* New folder input */
+.new-folder-container {
+  padding: 0 36px 20px;
+}
+
+.new-folder-input {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #2a2725;
+  border: 1px solid rgba(240,217,181,0.3);
+  border-radius: 8px;
+  padding: 10px 14px;
+  max-width: 360px;
+}
+
+.new-folder-input input {
+  flex: 1;
+  background: none;
+  border: none;
+  color: #e8e0d5;
+  font-size: 13px;
+  outline: none;
+}
+
+/* Folder list */
+.folder-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 36px 36px;
+}
+
+.empty-message {
+  color: #6e6560;
+  font-size: 14px;
+  margin-top: 40px;
+  text-align: center;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+
+.modal-window {
+  background: #1e1e1e;
+  padding: 24px;
+  border-radius: 12px;
+  width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+.folder-block {
+  margin-bottom: 16px;
+}
+
+.folder-title {
+  font-weight: bold;
+  margin-bottom: 6px;
+}
+
+.rep-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 4px 0;
+}
+
+.modal-actions {
+  margin-top: 20px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
+.folder-reps {
+  margin-left: 24px;
+  margin-top: 4px;
+  color: #ccc;
+  font-size: 0.9rem;
+}
+
+.rep-preview {
+  padding: 2px 0;
+}
+
+.empty {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+/* BoardView */
+.board-view-main {
+  display: flex;
+  gap: 32px;
+  padding: 32px;
+  align-items: flex-start;
+}
+
+.board-container {
+  width: 560px;
+  flex-shrink: 0;
+}
+
+.board-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.board-panel-title {
+  margin: 0;
+  color: #e8e0d5;
+}
+
+.move-history {
+  background: #2a2725;
+  border-radius: 8px;
+  padding: 16px;
+  min-height: 200px;
+  color: #c0b8b0;
+  font-size: 14px;
+  line-height: 2;
+}
+
+.move-history-empty {
+  color: #6e6560;
+}
+
+.move-number {
+  color: #6e6560;
+  margin-right: 4px;
+}
+
+.move-text {
+  margin-right: 12px;
+}
+
+.btn-reset {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  background: #5b8dd9;
+  color: #fff;
+  font-weight: 600;
+  cursor: pointer;
+  align-self: flex-start;
+}
+
+.btn-reset:hover {
+  background: #4a7bc8;
+}
+
+/* Highlight: selected square (yellow tint) */
+.highlight-selected {
+  background-color: rgba(255, 255, 0, 0.25) !important;
+}
+
+/* Highlight: legal move dot */
+.highlight-dot {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 20%, transparent 21%) !important;
+}
+
+/* Ensure dot is centered */
+.highlight-dot::before {
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+/* Optional: smooth highlight transitions */
+.highlight-selected,
+.highlight-dot {
+  transition: background 0.15s ease;
+}
+
+/* Selected square highlight (yellow tint, like lichess/chess.com) */
+.highlight-selected {
+  background-color: rgba(255, 255, 0, 0.25) !important;
+}
+
+/* Legal move dot (centered dark dot) */
+.highlight-dot {
+  background: radial-gradient(circle, rgba(0, 0, 0, 0.3) 20%, transparent 21%) !important;
+}
+
+/* Optional: smooth transitions for highlights */
+.highlight-selected,
+.highlight-dot {
+  transition: background 0.15s ease;
+}
+
+:root {
+  --highlight-selected: rgba(255, 255, 0, 0.25);
+  --highlight-dot: radial-gradient(circle, rgba(0, 0, 0, 0.3) 20%, transparent 21%);
+}
+
+/* Folder container */
+.folder-block {
+  margin-bottom: 24px;
+}
+
+/* Header row */
+.folder-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 0;
+}
+
+/* Folder icon */
+.folder-icon {
+  color: #c0b8b0;
+  width: 16px;
+  cursor: pointer;
+}
+
+/* Folder name text */
+.folder-name {
+  color: #e8e0d5;
+  font-size: 15px;
+}
+
+/* Folder rename input */
+.folder-input {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: #e8e0d5;
+  font-size: 14px;
+}
+
+.folder-input-error {
+  border-color: #b55;
+}
+
+/* Buttons (rename/delete) */
+.folder-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.folder-btn-rename {
+  color: #c0b8b0;
+}
+
+.folder-btn-delete {
+  color: #a86a6a;
+}
+
+/* Repertoire list */
+.repertoire-list {
+  margin-left: 26px;
+  margin-top: 6px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+/* Empty state */
+.repertoire-empty {
+  color: #6e6560;
+  font-size: 13px;
+}
+
+/* Container for each repertoire row */
+.rep-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+/* Icon */
+.rep-row-icon {
+  color: #9a9080;
+  width: 14px;
+}
+
+/* Name text */
+.rep-row-name {
+  color: #c0b8b0;
+  font-size: 14px;
+}
+
+/* Input when renaming */
+.rep-row-input {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
+  padding: 2px 6px;
+  color: #e8e0d5;
+  font-size: 13px;
+}
+
+/* Knight icon container */
+.knight-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* White knight background + border */
+.knight-white {
+  background: rgba(240, 217, 181, 0.15);
+  border: 1px solid rgba(240, 217, 181, 0.3);
+}
+
+/* Black knight background + border */
+.knight-black {
+  background: rgba(100, 80, 60, 0.25);
+  border: 1px solid rgba(150, 120, 90, 0.3);
+}
+
+/* Icon inside */
+.knight-piece {
+  font-size: 14px;
+}
+
+/* Icon colours */
+.piece-white {
+  color: #f0d9b5;
+}
+
+.piece-black {
+  color: #b58863;
+}
+
+/* InlineEdit — input mode */
+.inline-edit-input {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(240, 217, 181, 0.4);
+  border-radius: 4px;
+  color: #e8e0d5;
+  padding: 2px 6px;
+  font-size: inherit;
+  font-family: inherit;
+  font-weight: inherit;
+  outline: none;
+}
+
+/* InlineEdit — text mode */
+.inline-edit-text {
+  cursor: text;
+}
+/* ──────────────────────────────────────────────── */
+/* Repertoire Card Container */
+/* ──────────────────────────────────────────────── */
+
+.rep-card {
+  background: #2a2725;
+  border: 1px solid rgba(255, 255, 255, 0.07);
+  border-radius: 10px;
+  padding: 16px 18px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 110px;
+
+  transition: border-color 0.15s, background 0.15s, transform 0.1s;
+}
+
+.rep-card:hover {
+  border-color: rgba(240, 217, 181, 0.3);
+  background: #302e2c;
+  transform: translateY(-1px);
+}
+
+/* ──────────────────────────────────────────────── */
+/* Header Row */
+/* ──────────────────────────────────────────────── */
+
+.rep-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Title text inside InlineEdit */
+.rep-card-title {
+  font-weight: 600;
+  font-size: 15px;
+  color: #e8e0d5;
+}
+
+/* ──────────────────────────────────────────────── */
+/* Footer Row */
+/* ──────────────────────────────────────────────── */
+
+.rep-card-footer {
+  display: flex;
+  justify-content: space-between;
+  margin-top: auto;
+  font-size: 12px;
+  color: #6e6560;
+}
+
+/* ───────────────────────────────────────────── */
+/* Folder Section Wrapper */
+/* ───────────────────────────────────────────── */
+
+.folder-section {
+  margin-bottom: 28px;
+}
+
+/* ───────────────────────────────────────────── */
+/* Header Row */
+/* ───────────────────────────────────────────── */
+
+.folder-section-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 14px;
+  color: #9a9080;
+}
+
+/* Chevron button */
+.folder-chevron {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #9a9080;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s;
+}
+
+.folder-chevron.collapsed {
+  transform: rotate(-90deg);
+}
+
+.folder-chevron-icon {
+  font-size: 11px;
+}
+
+/* Folder icon */
+.folder-icon {
+  font-size: 13px;
+}
+
+/* Folder name (InlineEdit) */
+.folder-section-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: #c0b8b0;
+}
+
+/* File count */
+.folder-section-count {
+  font-size: 12px;
+  margin-left: 2px;
+  color: #6e6560;
+}
+
+/* ───────────────────────────────────────────── */
+/* Grid of Repertoire Cards */
+/* ───────────────────────────────────────────── */
+
+.folder-section-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+/* Empty message */
+.folder-section-empty {
+  color: #6e6560;
+  font-size: 13px;
+  padding: 8px 4px;
+}
