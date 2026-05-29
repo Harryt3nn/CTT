@@ -54,12 +54,12 @@ export async function loadRepertoires(): Promise<Repertoire[]> {
 export async function saveRepertoires(repertoires: Repertoire[]): Promise<void> {
   ensureDirs();
   for (const rep of repertoires) {
+    if (!rep.id) {
+      console.warn("Skipping repertoire with missing id", rep);
+      continue;
+    }
     const filePath = path.join(REPS_DIR, `${rep.id}.json`);
-    await fs.promises.writeFile(
-      filePath,
-      JSON.stringify(rep, null, 2),
-      "utf8"
-    );
+    await fs.promises.writeFile(filePath, JSON.stringify(rep, null, 2), "utf8");
   }
 }
 

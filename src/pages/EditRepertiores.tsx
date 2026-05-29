@@ -6,9 +6,9 @@ import { FileSystemStorageProvider } from "../Storage/FileSystemStorageProvider"
 import { useMemo } from "react";
 import FolderSelection from "../components/FolderSelection";
 import { validateChessGraphExport } from "../importsAndExports/validateChessGraphExport";
-import { prepareForImport } from "../importsAndExports/prepareForImport";
 import { ImportModal } from "../components/ImportModal";
 import { RepList } from "../Storage/RepList";
+import { prepareForImport } from "../importsAndExports/prepareForImport"
 
 export interface Repertoire {
   id: string;
@@ -433,40 +433,42 @@ const deleteFolder = async (folderId: string) => {
     setRepertoires(updatedRepertoires);
   };
 
-  const reloadData = async () => {
-  const folders = await window.storage.loadFolders();
-  setFolders(folders);
-
-  const reps = await window.storage.loadRepertoires();
-  setRepertoires(reps);
+  const UNCATEGORISED_FOLDER: Folder = {
+  id: '__uncategorised__',
+  name: 'Uncategorised',
+  collapsed: false,
+  sortOrder: 9999,
+  createdAt: 0,
+  updatedAt: 0,
 };
 
- const filtered = search.trim()
-  ? folders
-      .map(folder => {
-        const repsInFolder = repertoires.filter(
-          r =>
-            r.folderId === folder.id &&
-            r.name.toLowerCase().includes(search.toLowerCase())
-        );
+const reloadData = async () => {
+  const loadedFolders = await storage.loadFolders();
+  const loadedRepertoires = await storage.loadRepertoires();
 
-        const folderMatches = folder.name
-          .toLowerCase()
-          .includes(search.toLowerCase());
+  console.log("folders", loadedFolders);
+  console.log("repertoires", loadedRepertoires);
 
-        return {
-          ...folder,
-          collapsed: false,
-          filteredRepertoires: repsInFolder,
-          folderMatches
-        };
-      })
-      .filter(f => f.folderMatches || f.filteredRepertoires.length > 0)
-  : folders.map(folder => ({
-      ...folder,
-      filteredRepertoires: repertoires.filter(r => r.folderId === folder.id)
-    }));
+  setFolders([
+    ...loadedFolders.filter(f => f.id !== '__uncategorised__'),
+    UNCATEGORISED_FOLDER,
+  ]);
+  setRepertoires(loadedRepertoires);
+};
 
+ const filtered = folders
+  .map(folder => ({
+    ...folder,
+    filteredRepertoires: repertoires.filter(r =>
+      (folder.id === '__uncategorised__' ? r.folderId === null : r.folderId === folder.id) &&
+      (search.trim() === '' || r.name.toLowerCase().includes(search.toLowerCase()))
+    ),
+  }))
+  .filter(folder =>
+    search.trim() === '' ||
+    folder.name.toLowerCase().includes(search.toLowerCase()) ||
+    folder.filteredRepertoires.length > 0
+  );
 
 
   // ── Render ─────────────────────────────────────────────────────────────────

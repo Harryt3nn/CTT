@@ -1,43 +1,6 @@
-Symbol website: https://www.w3schools.com/icons/icons_reference.asp 
+1. Add export feature in edit repertoires page. Ideally, this will be in the same format as chess graph. Moderately low priority. 
 
+2. Change 'repositories' back to a normal word for the storage. This does not affect the functionality and is therefore a low priority task. 
 
+3. Add permanent connections to Chess.com and Lichess API with analytics page + way to display and read data. Possibly able to use current system manager, or instead build new architcure. - Most high priority.
 
-
-Back arrow (left facing): &#xf060;
-or in a circle &#xf0a8;
-
-queen: &#xf445;
-king: &#xf43f;
-pawn: &#xf443;
-rook: &#xf447;
-bishop: &#xf43a;
-knight: &#xf441;
-board: 	&#xf43c;
-settings cog: &#xf013;
-
-
-export interface Node {
-  id: string;
-  repertoireId: string;
-  move: string | null;            
-  fen: string;
-  comment: string;
-  color: string;                  
-  tags: string[];
-  parentId: string | null;
-  childIds: string[];
-  transpositionEdges: string[];  
-  arrows: Arrow[];
-  highlightedSquares: HighlightedSquare[];
-}
-
-export interface Arrow {
-  from: string;   
-  to: string;     
-  color: string;  
-}
-
-export interface HighlightedSquare {
-  square: string; 
-  color: string;  
-}

@@ -15,7 +15,7 @@ declare const MAIN_WINDOW_PRELOAD_WEBPACK_ENTRY: string;
 
 const DATA_DIR = path.join(app.getPath("userData"), "ctt-data");
 const FOLDERS_PATH = path.join(DATA_DIR, "folders.json");
-const REPS_DIR = path.join(DATA_DIR, "repertoires");
+const REPS_DIR = path.join(DATA_DIR, "repositories");
 
 function ensureDirs() {
   if (!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
@@ -89,6 +89,7 @@ const createWindow = (): void => {
   });
 
   mainWindow.loadURL(MAIN_WINDOW_WEBPACK_ENTRY);
+  mainWindow.webContents.openDevTools();
 };
 
 app.on("ready", createWindow);
