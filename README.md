@@ -1,0 +1,1 @@
+Chess Training Toolkit. As an avid chess enthusiast, I often find myself dissatisfied with available chess training tools. Most of the best tools are behind a subscription wall, and just don't feel right for me. This project is designed for my own personal use, but can be used by anyone.
